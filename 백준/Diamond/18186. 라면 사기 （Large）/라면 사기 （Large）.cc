@@ -30,10 +30,7 @@ int main()
             for(int j=0; j<N-i+1; j++){
                 ll num = MAX;
                 for(int k=0; k<i; k++) num = min(num, arr[j+k]);
-                if(i == 3) {
-                    while(num && arr[j] + arr[j+2] < arr[j+1] + num) num--;
-                }
-                
+                if(i == 3 && arr[j] - arr[j+1] + arr[j+2] < num) num = max(arr[j] - arr[j+1] + arr[j+2], 0ll);
                 for(int k=0; k<i; k++) arr[j+k] -= num;
                 sum += num * cost[i];
             }
