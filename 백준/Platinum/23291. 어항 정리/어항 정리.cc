@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 #define MAX_VALUE 50001
 #define EMPTY -1
 #define vi vector<int>
@@ -21,7 +20,7 @@ int get_diff(){
     return (M-m);
 }
 
-void minus_all_min_idx(){
+void add_to_min(){
     int m = MAX_VALUE;
     for(int i=0; i<N; i++) m = min(m, v[i][0]);
     for(int i=0; i<N; i++) if(v[i][0] == m) v[i][0]++;
@@ -45,12 +44,12 @@ void first_lift_up(){
     v[s][0] = EMPTY; s++;
 
     while(check_first_lift_up_pos()){
-        int next_s = s;
+        int ns = s;
         vvi sv;
 
         for(int i=s; i<=N-1; i++){
             if(v[i][1] == EMPTY) continue;
-            next_s = i;
+            ns = i;
 
             vi tmp;
             for(int j=0; v[i][j] != EMPTY; j++){
@@ -60,7 +59,7 @@ void first_lift_up(){
             sv.push_back(tmp);
         }
 
-        s = next_s + 1;
+        s = ns + 1;
         for(int i=0; i<sv.size(); i++){
             int target_line = sv.size()-i;
             for(int j=s; j<s+sv[i].size(); j++){
@@ -96,11 +95,11 @@ void align(){
         for(int j=0; v[i][j] != EMPTY; j++){
             int diff = 0;
             for(int k=0; k<4; k++){
-                int target_i = i + dx[k];
-                int target_j = j + dy[k];
+                int ni = i + dx[k];
+                int nj = j + dy[k];
 
-                if(target_i < 0 || target_j < 0 || v[target_i][target_j] == EMPTY) continue;
-                diff += (v[target_i][target_j] - v[i][j]) / 5;
+                if(ni < 0 || nj < 0 || v[ni][nj] == EMPTY) continue;
+                diff += (v[ni][nj] - v[i][j]) / 5;
             }
             tmp.push_back(diff);
         }
@@ -115,20 +114,20 @@ void align(){
 }
 
 void second_lift_up(){
-    int next_s = s + N/2;
+    int ns = s + N/2;
     for(int i=N/2-1; i>=0; i--){
-        v[next_s+(N/2-1-i)][1] = v[i][0];
+        v[ns+(N/2-1-i)][1] = v[i][0];
         v[i][0] = EMPTY;
     }
-    s = next_s;
+    s = ns;
 
     vector<pair<int, int>> tmp;
-    next_s = s + N/4;
-    for(int i=next_s-1; i>=s; i--){
+    ns = s + N/4;
+    for(int i=ns-1; i>=s; i--){
         tmp.push_back({v[i][1], v[i][0]});
         v[i][0] = v[i][1] = EMPTY;
     }
-    s = next_s;
+    s = ns;
 
     for(int i=s; i<=N-1; i++){
         v[i][2] = tmp[i-s].first;
@@ -149,7 +148,7 @@ int main(){
 
     int cnt = 0;
     while(get_diff() > K){
-        minus_all_min_idx();
+        add_to_min();
         first_lift_up();
         align();
         flatten();
