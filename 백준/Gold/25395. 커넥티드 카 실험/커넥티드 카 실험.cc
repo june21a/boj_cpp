@@ -22,37 +22,17 @@ int main(){
     ll last_state = 0;
     visited[S] = true;
     while(true){
-        if(r+1 < N+1 && (place[r+1] - place[r]) <= fuel[r] && (place[r+1] - place[l]) <= fuel[l]){
+        if(r+1 < N+1 && ((place[r+1] - place[r]) <= fuel[r] || (place[r+1] - place[l]) <= fuel[l])){
             visited[r+1] = true;
             fuel[r+1] = max(fuel[r+1], fuel[r] - (place[r+1] - place[r]));
-            fuel[r+1] = max(fuel[r+1], fuel[l] - (place[r+1] - place[l]));
-            r++;
-        }
-        else if(r+1 < N+1 && (place[r+1] - place[r]) <= fuel[r]){ // r -> r+1
-            visited[r+1] = true;
-            fuel[r+1] = max(fuel[r+1], fuel[r] - (place[r+1] - place[r]));
-            r++;
-        }
-        else if(r+1 < N+1 && (place[r+1] - place[l]) <= fuel[l]){ // l -> r+1
-            visited[r+1] = true;
             fuel[r+1] = max(fuel[r+1], fuel[l] - (place[r+1] - place[l]));
             r++;
         }
 
-        if(l-1 > 0 && (place[l] - place[l-1]) <= fuel[l] && (place[r] - place[l-1]) <= fuel[r]){
+        if(l-1 > 0 && ((place[l] - place[l-1]) <= fuel[l] || (place[r] - place[l-1]) <= fuel[r])){
             visited[l-1] = true;
             fuel[l-1] = max(fuel[l-1], fuel[r] - (place[r] - place[l-1]));
             fuel[l-1] = max(fuel[l-1], fuel[l] - (place[l] - place[l-1]));
-            l--;
-        }
-        else if(l-1 > 0 && (place[l] - place[l-1]) <= fuel[l]){ // l -> l-1
-            visited[l-1] = true;
-            fuel[l-1] = max(fuel[l-1], fuel[l] - (place[l] - place[l-1]));
-            l--;
-        }
-        else if(l-1 > 0 && (place[r] - place[l-1]) <= fuel[r]){ // r -> l-1
-            visited[l-1] = true;
-            fuel[l-1] = max(fuel[l-1], fuel[r] - (place[r] - place[l-1]));
             l--;
         }
 
